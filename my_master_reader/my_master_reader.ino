@@ -14,6 +14,8 @@ const byte TIME_BETWEEN_READINGS = 10;            //Time between readings
 const float Vcal_USA = 130.0;                             //Calibration for US AC-AC adapter 77DA-10-09
 ESP8266WebServer server(80);
 int blue = 2;
+int sda = 0;//GPIO0 is D3
+int scl = 4;//GPIO4 is D2
 WiFiClient client;                      // Create an ESP8266 WiFiClient class to connect to the MQTT server.
 char domain[] = "emoncms.org";
 float power6;
@@ -25,7 +27,7 @@ Ticker ticker;
 void setup()
 {
   Serial.begin(9600);
-  Wire.begin(0,4);//Change to Wire.begin() for non ESP.
+  Wire.begin(sda,scl);//Change to Wire.begin() for non ESP.
   Serial.print(F("Connecting to "));
   Serial.println(WLAN_SSID);
   pinMode(blue, OUTPUT);
@@ -55,12 +57,12 @@ void setup()
 
   server.on("/", handle_root);
   server.begin();
-  ticker.attach(1.0, handleClient);
+//  ticker.attach(1.0, handleClient);
 }
 
 void loop()
 {
-	//unsigned long start = millis();
+	unsigned long start = millis();
 	if (WiFi.status() != WL_CONNECTED)
 	{
 		Serial.println("REBOOT");
@@ -119,8 +121,8 @@ void loop()
 		delay(500);
 		digitalWrite(blue, LOW);
 	}
-	//unsigned long runtime = millis() - start;
-	//unsigned long sleeptime = (TIME_BETWEEN_READINGS * 1000) - runtime - 100;
+	unsigned long runtime = millis() - start;
+	unsigned long sleeptime = (TIME_BETWEEN_READINGS * 1000) - runtime - 100;
 	//delay(sleeptime);
 	delay(8000);
 }

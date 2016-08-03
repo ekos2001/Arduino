@@ -14,15 +14,15 @@ void setup()
 
   for (int i = 0; i < NUM_MONITORS; i++)
   {
-	  monitors[i].current(i, 59.3);
+    monitors[i].current(i, 59.3);
   }
 
   for (int i = 0; i < NUM_MONITORS; i++)
   {
-	  for (int k = 0; k < 5; k++)
-	  {
-		  monitors[i].calcIrms(1480);
-	  }
+    for (int k = 0; k < 5; k++)
+    {
+      monitors[i].calcIrms(1480);
+    }
   }
 
   Wire.begin(I2CAddressESPWifi);
@@ -32,7 +32,7 @@ void setup()
 
 void loop()
 {
-	delay(1);
+  delay(1);
 	/*
 	Serial.print(monitors[6].calcIrms(1480));
 	Serial.print(" ");
@@ -42,16 +42,19 @@ void loop()
 
 void espWifiReceiveEvent(int count)
 {
-	long c;
-	Serial.print("Received[");
-	I2C_readAnything(c);
-	Serial.print(c);
-	Serial.println("]");
-	//calc response.
-	irms = monitors[c].calcIrms(1480);
-	Serial.print("IRMS='");
-	Serial.print(irms);
-	Serial.println("'");
+  long c;
+  Serial.print("Received[");
+  I2C_readAnything(c);
+  Serial.print(c);
+  Serial.println("]");
+  //calc response.
+  if (c < 0)
+    irms  = monitors[0].readVcc();
+  else
+    irms = monitors[c].calcIrms(1480);
+  Serial.print("IRMS='");
+  Serial.print(irms);
+  Serial.println("'");
 }
 
 void espWifiRequestEvent()

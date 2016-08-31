@@ -53,6 +53,12 @@ void setup()
 void loop()
 {
   unsigned long start = millis();
+  if (READVCC_CALIBRATION_CONST != 1092980L)
+  {
+    Serial.println("Wrong READVCC_CALIBRATION_CONST, should be 1092980L");
+    delay(100);
+    return;
+  }
   if (calibrate)
   {
     //1. Calibrate voltage

@@ -15,9 +15,9 @@ PayloadTX emontx;
 double irms = 0;
 //EnergyMonitor monitors[NUM_MONITORS];
 EnergyMonitor ct7, ct6;
-const float Ical7 =                59.3;              // (2000 turns / 22 Ohm burden) = 90.9; my is 32 Ohm, so 2000/32 = 62
-const float Ical6 =                59.3;
-const float Vcal =                 79.5;
+const float Ical7 =                60.4;              // (2000 turns / 22 Ohm burden) = 90.9; my is 32 Ohm, so 2000/32 = 62
+const float Ical6 =                60.4;
+const float Vcal =                 83.4;
 const int no_of_half_wavelengths = 30;
 const int timeout =                2000;                              //emonLib timeout
 const float phase_shift =          1.7;
@@ -28,7 +28,7 @@ volatile byte pulseCount = 0;
 unsigned long pulsetime = 0;                                  // Record time of interrupt pulse
 
 //
-bool calibrate = true;
+bool calibrate = false;
 //
 void setup()
 {
@@ -63,16 +63,16 @@ void loop()
   {
     //1. Calibrate voltage
     //New calibration = existing calibration × (correct reading ÷ emonTx reading)
-    ct7.calcVI(no_of_half_wavelengths, timeout); emontx.power7 = ct7.Vrms * 100;
-    ct6.calcVI(no_of_half_wavelengths, timeout); emontx.power6 = ct6.Vrms * 100;
+    //ct7.calcVI(no_of_half_wavelengths, timeout); emontx.power7 = ct7.Vrms * 100;
+    //ct6.calcVI(no_of_half_wavelengths, timeout); emontx.power6 = ct6.Vrms * 100;
 
     //2. Calibrate current
     //ct7.calcVI(no_of_half_wavelengths, timeout); emontx.power7 = ct7.Irms * 100;
     //ct6.calcVI(no_of_half_wavelengths, timeout); emontx.power6 = ct6.Irms * 100;
 
     //3. Calibrate phase
-    //ct7.calcVI(no_of_half_wavelengths, timeout); emontx.power7 = ct7.powerFactor * 100;
-    //ct6.calcVI(no_of_half_wavelengths, timeout); emontx.power6 = ct6.powerFactor * 100;
+    ct7.calcVI(no_of_half_wavelengths, timeout); emontx.power7 = ct7.powerFactor * 100;
+    ct6.calcVI(no_of_half_wavelengths, timeout); emontx.power6 = ct6.powerFactor * 100;
 
     //ct7.serialprint();
   }

@@ -6,8 +6,8 @@
 #include <SoftEasyTransfer.h>
 #include <SoftwareSerial.h>
 
-#define WLAN_SSID       "linksys2"
-#define WLAN_PASS       "s0ftc0mputer"
+#define WLAN_SSID       "..."
+#define WLAN_PASS       "..."
 
 int d1 = 5;
 int d2 = 4;
